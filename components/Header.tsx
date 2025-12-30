@@ -11,7 +11,7 @@ export default function Header() {
       <header className="sticky top-0 z-40 border-b backdrop-blur">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
           <div className="text-base font-semibold tracking-tight">
-            Instagram Follow Check
+            FollowSync
           </div>
 
           {/* 햄버거 버튼 */}
