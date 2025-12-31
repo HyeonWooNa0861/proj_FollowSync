@@ -52,45 +52,43 @@ export default function ChatZipBar() {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50">
-      <div className="mx-auto max-w-3xl px-4 pb-4">
-        {status && (
-          <div className="mb-2 rounded-xl border px-4 py-2 text-sm shadow-sm">
-            {status}
-          </div>
-        )}
-
-        <div className="flex items-center gap-2 rounded-2xl border p-2 shadow-sm">
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            disabled={busy}
-            className="h-11 w-11 rounded-xl"
-          >
-            +
-          </button>
-
-          <div className="flex h-11 flex-1 items-center rounded-xl px-4 text-sm">
-            {file ? file.name : "ZIP 파일을 선택하세요"}
-          </div>
-
-          <button
-            type="button"
-            onClick={onSend}
-            disabled={busy}
-            className="h-11 w-11 rounded-xl"
-          >
-            ▶
-          </button>
-
-          <input
-            ref={inputRef}
-            type="file"
-            accept=".zip"
-            className="hidden"
-            onChange={(e) => onPick(e.target.files?.[0] ?? null)}
-          />
+    <div className="rounded-2xl border bg-card p-2 shadow-sm">
+      {status && (
+        <div className="mb-2 rounded-xl border px-4 py-2 text-sm shadow-sm">
+          {status}
         </div>
+      )}
+
+      <div className="flex items-center gap-2 rounded-2xl border p-2 shadow-sm">
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={busy}
+          className="h-11 w-11 rounded-xl"
+        >
+          +
+        </button>
+
+        <div className="flex h-11 flex-1 items-center rounded-xl px-4 text-sm">
+          {file ? file.name : "ZIP 파일을 선택하세요"}
+        </div>
+
+        <button
+          type="button"
+          onClick={onSend}
+          disabled={busy}
+          className="h-11 w-11 rounded-xl"
+        >
+          ▶
+        </button>
+
+        <input
+          ref={inputRef}
+          type="file"
+          accept=".zip"
+          className="hidden"
+          onChange={(e) => onPick(e.target.files?.[0] ?? null)}
+        />
       </div>
     </div>
   );

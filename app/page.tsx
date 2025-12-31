@@ -1,19 +1,19 @@
+import Container from "@/components/layout/Container";
 import Header from "../components/Header";
-import Guide from "../components/guide/Guide";
 import ChatZipBar from "../components/upload/ChatZipBar";
 
 export default function Page() {
   return (
-    <div className="min-h-dvh">
+    <div className="min-h-dvh flex flex-col bg-background">
+      {/* 상단 헤더 */}
       <Header />
 
-      <main className="mx-auto max-w-3xl px-4 pb-28 pt-6">
-        <Guide totalSteps={10} />
+      {/* 중앙 ZIP 업로드 영역 */}
+      <main className="flex flex-1 items-center justify-center px-4">
+        <Container>
+          <ChatZipBar />
+        </Container>
       </main>
-
-      {/* 중앙 하단 고정 업로드 바 */}
-      <ChatZipBar />
     </div>
   );
 }
-

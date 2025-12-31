@@ -18,7 +18,7 @@ export default function Guide({ totalSteps }: Props) {
       "Some of your info 선택",
       "Connections 선택",
       "Followers and following 체크",
-      "Format: JSON 선택",
+      "Format을 JSON으로 설정",
       "Download to device 선택",
       "Create files(내보내기 만들기) 진행",
       "ZIP 다운로드 후 이 앱에 업로드",
@@ -54,9 +54,7 @@ export default function Guide({ totalSteps }: Props) {
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort(
-            (a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0)
-          )[0];
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
         if (!visible) return;
 
@@ -65,7 +63,7 @@ export default function Guide({ totalSteps }: Props) {
         );
         if (idx >= 1 && idx <= totalSteps) setCurrent(idx);
       },
-      { root: null, threshold: [0.2, 0.4, 0.6] }
+      { threshold: [0.3, 0.6] }
     );
 
     els.forEach((el) => obs.observe(el));
@@ -73,59 +71,66 @@ export default function Guide({ totalSteps }: Props) {
   }, [totalSteps]);
 
   return (
-    <section className="relative">
-      {/* 중앙 상단 진행도 표시 */}
-      <div className="sticky top-14 z-30 flex justify-center pt-3">
-        <div className="progress rounded-full border px-4 py-2 text-sm shadow-sm backdrop-blur">
-          {current}/{totalSteps}
-        </div>
-      </div>
+    <section className="guide-root">
+      {/* 진행도 제거: .guide-progress 삭제 */}
 
-      {/* 가이드 카드들 */}
-      <div className="mt-4 space-y-6">
+      <div className="guide-list">
         {steps.map((s, i) => (
-          <div
-            key={s.idx}
-            ref={(el) => {
-              itemsRef.current[i] = el;
-            }}
-            data-step={s.idx}
-            className="card rounded-2xl border p-4 shadow-sm"
-          >
-            <div className="imgWrap overflow-hidden rounded-xl border">
-              <img src={s.file} alt={`step ${s.idx}`} className="h-auto w-full" />
+          <div key={s.idx}>
+            <div
+              ref={(el) => (itemsRef.current[i] = el)}
+              data-step={s.idx}
+              className="guide-card"
+            >
+              <div className="guide-img">
+                <img src={s.file} alt={`step ${s.idx}`} />
+              </div>
+
+              {/* 가이스 스텝 번호 */}
+              <div className="guide-text">
+                <span className="step">{s.idx}</span>
+                <p>{s.text}</p>
+              </div>
             </div>
 
-            <div className="mt-3 text-sm">
-              <span className="mr-2 font-semibold">{s.idx}.</span>
-              {s.text}
-            </div>
+            {i !== steps.length - 1 && <div className="guide-divider" />}
           </div>
         ))}
       </div>
 
       <style jsx>{`
-        .progress {
-          border-color: var(--card-border);
-          background: color-mix(in srgb, var(--bg) 85%, transparent);
-          color: var(--muted-fg);
-        }
-
-        .card {
-          border-color: var(--card-border);
+        .guide-root {
+          max-height: 70vh;
+          overflow-y: auto;
           background: var(--card);
-          color: var(--muted-fg);
+          padding: 24px;
+          border-radius: 24px;
+          border: 1px solid var(--card--border);
         }
-
-        .card .font-semibold {
-          color: var(--fg);
+        .guide-list {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
         }
-
-        .imgWrap {
-          border-color: var(--card-border);
-          background: var(--muted);
+        .guide-card {
+          border-radius: 16px;
+          border: 1px solid var(--card-border);
+          background: var(--card);
+          padding: 16px;
         }
+        .guide-divider {
+          height: 1px;
+          margin: 12px 0;
+          background: linear-gradient(
+            to right,
+            transparent,
+            var(--card-border),
+            transparent
+          );
+        }
+        /* … guide-card, guide-img, guide-text 스타일 유지 … */
       `}</style>
     </section>
   );
 }
+
