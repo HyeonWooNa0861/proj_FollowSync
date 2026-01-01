@@ -52,7 +52,7 @@ export default function ChatZipBar() {
   };
 
   return (
-    <div className="rounded-2xl border bg-card p-2 shadow-sm">
+    <div className="rounded-2xl bg-card p-2 shadow-sm">
       {status && (
         <div className="mb-2 rounded-xl border px-4 py-2 text-sm shadow-sm">
           {status}

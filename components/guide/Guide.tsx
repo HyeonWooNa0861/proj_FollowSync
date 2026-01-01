@@ -71,7 +71,7 @@ export default function Guide({ totalSteps }: Props) {
   }, [totalSteps]);
 
   return (
-    <section className="guide-root">
+    <section className="guide-root hide-scrollbar">
       {/* 진행도 제거: .guide-progress 삭제 */}
 
       <div className="guide-list">
@@ -105,7 +105,7 @@ export default function Guide({ totalSteps }: Props) {
           background: var(--card);
           padding: 24px;
           border-radius: 24px;
-          border: 1px solid var(--card--border);
+          border: 1px solid var(--card-border);
         }
         .guide-list {
           display: flex;
