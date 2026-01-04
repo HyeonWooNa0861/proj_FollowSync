@@ -4,10 +4,11 @@ import JSZip from "jszip";
 export type ParseResult = {
   followers: string[];
   following: string[];
+  nonFollowers: string[]; // ✅ 추가: 내가 팔로우하지만 나를 안 팔로우하는 사람
 };
 
-function lower(s: string) {
-  return s.toLowerCase();
+function normalizeKey(s: string) {
+  return s.replace(/^@/, "").trim().toLowerCase();
 }
 
 function extractUsernames(anyJson: any): string[] {
@@ -34,24 +35,18 @@ function extractUsernames(anyJson: any): string[] {
           else if (typeof it?.href === "string") {
             // 예: https://www.instagram.com/_u/username
             const match = it.href.match(/instagram\.com\/_u\/([^/?]+)/i);
-            if (match) {
-              out.push(match[1]);
-            }
+            if (match) out.push(match[1]);
           }
         }
       }
 
       // 별도로 title 필드에 사용자명이 들어오는 경우
       const t = (node as any).title;
-      if (typeof t === "string" && t.trim()) {
-        out.push(t.trim());
-      }
+      if (typeof t === "string" && t.trim()) out.push(t.trim());
 
       // username 필드 처리(기존 코드 유지)
       const u = (node as any).username;
-      if (typeof u === "string" && u.trim()) {
-        out.push(u.trim());
-      }
+      if (typeof u === "string" && u.trim()) out.push(u.trim());
 
       Object.values(node).forEach(visit);
     }
@@ -67,7 +62,7 @@ function extractUsernames(anyJson: any): string[] {
 
 /**
  * Instagram 다운받은 ZIP 파일에서 followers / following JSON을 추출해
- * 각 배열로 반환하는 함수
+ * 각 배열 + nonFollowers를 반환하는 함수
  */
 export async function parseInstagramZip(zip: JSZip): Promise<ParseResult> {
   const names = Object.keys(zip.files);
@@ -103,8 +98,35 @@ export async function parseInstagramZip(zip: JSZip): Promise<ParseResult> {
     followingAll.push(...extractUsernames(JSON.parse(txt)));
   }
 
-  return {
-    followers: Array.from(new Set(followersAll)),
-    following: Array.from(new Set(followingAll)),
-  };
+  // ✅ (1) 원본 리스트를 "정규화 키 → 원본 표기"로 매핑
+  // 같은 계정이 대소문자만 다르게 나오면, 먼저 나온 원본을 대표로 사용
+  const followersMap = new Map<string, string>();
+  for (const u of followersAll) {
+    const key = normalizeKey(u);
+    if (key && !followersMap.has(key)) followersMap.set(key, u.replace(/^@/, "").trim());
+  }
+
+  const followingMap = new Map<string, string>();
+  for (const u of followingAll) {
+    const key = normalizeKey(u);
+    if (key && !followingMap.has(key)) followingMap.set(key, u.replace(/^@/, "").trim());
+  }
+
+  // ✅ (2) Set 비교로 nonFollowers 계산: following - followers
+  const nonFollowers: string[] = [];
+  for (const [key, original] of followingMap.entries()) {
+    if (!followersMap.has(key)) nonFollowers.push(original);
+  }
+
+  // ✅ (3) 최종 반환 (중복 제거 + 정렬)
+  const followers = Array.from(followersMap.values()).sort((a, b) =>
+    a.localeCompare(b)
+  );
+  const following = Array.from(followingMap.values()).sort((a, b) =>
+    a.localeCompare(b)
+  );
+
+  nonFollowers.sort((a, b) => a.localeCompare(b));
+
+  return { followers, following, nonFollowers };
 }

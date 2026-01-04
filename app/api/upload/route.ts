@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import JSZip from "jszip";
 import { parseInstagramZip } from "@/lib/instagramZip";
-import { getUnfollowers } from "@/lib/compare";
 
 /**
  * 업로드된 ZIP 파일을 서버에서 처리하는 API
@@ -20,14 +19,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-        // File을 ArrayBuffer로 바꾼 뒤 JSZip에 넘긴다
+    // File을 ArrayBuffer로 바꾼 뒤 JSZip에 넘긴다
     const arrayBuffer = await file.arrayBuffer();
     const zip = await JSZip.loadAsync(arrayBuffer);
 
-    const { followers, following } = await parseInstagramZip(zip);
-    const unfollowers = getUnfollowers(followers, following);
+    // ✅ lib/instagramZip.ts에서 nonFollowers(=맞팔 아님)까지 계산된 결과를 받음
+    const { followers, following, nonFollowers } = await parseInstagramZip(zip);
 
-    return NextResponse.json({ followers, following, unfollowers });
+    // ✅ 기존 UI/로직 호환을 위해 응답 필드명은 unfollowers로 유지
+    // (프론트에서 unfollowers를 쓰고 있을 가능성이 높음)
+    return NextResponse.json({
+      followers,
+      following,
+      unfollowers: nonFollowers,
+    });
   } catch (err) {
     return NextResponse.json(
       { error: "서버 처리 중 오류가 발생했습니다." },
