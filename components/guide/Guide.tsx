@@ -129,6 +129,21 @@ export default function Guide({ totalSteps }: Props) {
           );
         }
         /* … guide-card, guide-img, guide-text 스타일 유지 … */
+        .guide-img {
+          width: 100%;
+          aspect-ratio: 16 / 9;   
+          border-radius: 12px;
+          overflow: hidden;
+          background: var(--muted);
+          margin-bottom: 12px;
+        }
+
+        .guide-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;     
+          display: block;
+        }
       `}</style>
     </section>
   );
