@@ -32,12 +32,11 @@ export default function SettingsDrawer({ open, onClose }: Props) {
       {/* drawer */}
       <aside className="drawer absolute right-0 top-0 h-full w-[82vw] max-w-sm shadow-xl">
         <div className="drawerHeader flex items-center justify-between border-b px-5 py-4">
-          <div className="text-base font-semibold">설정</div>
-          <button
-            onClick={onClose}
-            className="closeBtn rounded-lg px-2 py-1 text-sm"
-          >
-            닫기
+          <div className="text-base font-semibold">
+            {settings.language === "ko" ? "설정" : "Settings"}  
+          </div>
+          <button onClick={onClose} className="closeBtn rounded-lg px-2 py-1 text-sm">
+            {settings.language === "ko" ? "닫기" : "Close"}
           </button>
         </div>
 
@@ -167,7 +166,7 @@ export default function SettingsDrawer({ open, onClose }: Props) {
           </div>
 
           <div className="notice rounded-xl px-4 py-3 text-xs">
-            로그인/비밀번호 없이, 인스타 공식 내보내기 파일만 사용합니다.
+            {settings.language === "ko" ? "로그인/비밀번호 없이, 인스타 공식 내보내기 파일만 사용합니다." : "No login or password required. We only use official Instagram export files."}
           </div>
         </div>
       </aside>

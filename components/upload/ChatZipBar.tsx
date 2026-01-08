@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import {useSettings} from "../settings/SettingsContext"
 
 export default function ChatZipBar() {
+  const {settings} = useSettings();
+  const [mounted,setMounted] =  useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [file, setFile] = useState<File | null>(null);
@@ -12,20 +15,24 @@ export default function ChatZipBar() {
   // ✅ 추가: 결과 리스트 상태(언팔로워 목록)
   const [unfollowers, setUnfollowers] = useState<string[]>([]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, [])
+
   const onPick = (f: File | null) => {
     setFile(f);
-    setStatus(f ? `선택됨: ${f.name}` : "");
+    setStatus(f ? (settings.language === "ko" ? `선택됨: ${f.name}` : `Selected: ${f.name}`): "");
     setUnfollowers([]); // ✅ 파일 바꾸면 이전 목록 초기화
   };
 
   const onSend = async () => {
     if (!file || busy) {
-      setStatus(file ? status : "ZIP 파일을 먼저 선택해주세요.");
+      setStatus(file ? status : (settings.language === "ko" ? "ZIP 파일을 먼저 선택해주세요." : "Please select a ZIP file first."));
       return;
     }
 
     setBusy(true);
-    setStatus("서버에서 ZIP 분석 중…");
+    setStatus(settings.language === "ko" ? "서버에서 ZIP 분석 중…" : "Analyzing ZIP on server...");
     setUnfollowers([]); // ✅ 새 분석 시작할 때 초기화
 
     try {
@@ -46,13 +53,23 @@ export default function ChatZipBar() {
       // ✅ 추가: 목록 저장 (없을 수도 있으니 안전하게)
       const list = Array.isArray(data.unfollowers) ? data.unfollowers : [];
       setUnfollowers(list);
-
-      setStatus(
+      
+      if (settings.language === "ko") {
+        setStatus(
         `완료 | ` +
           `팔로워 ${data.followers.length}, ` +
           `팔로잉 ${data.following.length}, ` +
           `언팔로워 ${list.length}`
-      );
+        );
+      } else {
+        setStatus(
+          `Done | ` +
+            `Followers ${data.followers.length},` +
+            `Following ${data.following.length},` +
+            `Unfollowers ${list.length}`
+        )
+      }
+      
     } catch (e: any) {
       setStatus(e?.message ?? "분석에 실패했어요. ZIP 파일을 확인해주세요.");
       setUnfollowers([]);
@@ -73,7 +90,9 @@ export default function ChatZipBar() {
       {unfollowers.length > 0 && (
         <details className="mb-2 rounded-xl border px-4 py-2 text-sm shadow-sm">
           <summary className="cursor-pointer select-none">
-            언팔로워 목록 보기 ({unfollowers.length})
+            {!mounted || settings.language === "ko" 
+              ? `언팔로워 목록 보기 (${unfollowers.length})` 
+              : `View Unfollowers List (${unfollowers.length})`}
           </summary>
 
           <div className="mt-2 max-h-64 overflow-auto">
@@ -87,7 +106,7 @@ export default function ChatZipBar() {
                     rel="noreferrer"
                     className="text-xs underline opacity-80 hover:opacity-100"
                   >
-                    프로필
+                    {settings.language === "ko" ? "프로필" : "Profile"}
                   </a>
                 </li>
               ))}
@@ -107,7 +126,7 @@ export default function ChatZipBar() {
         </button>
 
         <div className="flex h-11 flex-1 items-center rounded-xl px-4 text-sm">
-          {file ? file.name : "ZIP 파일을 선택하세요"}
+          {file ? file.name : (!mounted || settings.language === "ko" ? "ZIP 파일을 선택하시요" : "Select a ZIP file")}
         </div>
 
         <button

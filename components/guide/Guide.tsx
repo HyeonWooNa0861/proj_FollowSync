@@ -14,36 +14,37 @@ export default function Guide({ totalSteps }: Props) {
 
   const steps = useMemo(() => {
     const ko = [
-      "인스타그램 설정에서 Accounts Center로 이동",
-      "Your information and permissions 선택",
-      "Download your information 선택",
-      "Some of your info 선택",
-      "Connections 선택",
-      "Followers and following 체크",
-      "Format을 JSON으로 설정",
-      "Download to device 선택",
-      "Create files(내보내기 만들기) 진행",
+      "인스타그램 설정에서 계정 센터로 이동",
+      "내 정보 및 권한 선택",
+      "내 정보 내보내기 선택",
+      "내보내기 만들기 선택",
+      "기기로 내보내기 선택",
+      "정보 맞춤 설정 및 형식 변환",
+      "팔로워 및 팔로잉 체크",
+      "형식을 JSON으로 설정",
+      "내보내기 시작 선택",
       "ZIP 다운로드 후 이 앱에 업로드",
     ];
 
     const en = [
       "Open Instagram settings → Accounts Center",
       "Select Your information and permissions",
-      "Select Download your information",
-      "Choose Some of your info",
-      "Select Connections",
+      "Select Export your information",
+      "Select Create export",
+      "Select Export to device",
+      "Change Customize information and Format",
       "Check Followers and following",
       "Choose format: JSON",
-      "Choose Download to device",
-      "Create files (export request)",
+      "Select Start export",
       "Download ZIP and upload here",
     ];
 
     const desc = settings.language === "en" ? en : ko;
+    const langDir = settings.language === "en" ? "en" : "ko";
 
     return Array.from({ length: totalSteps }).map((_, i) => {
       const idx = i + 1;
-      const file = `/guide/step${String(idx).padStart(2, "0")}.png`;
+      const file = `/guide/${langDir}/step${String(idx).padStart(2, "0")}.png`;
       return { idx, file, text: desc[i] ?? `Step ${idx}` };
     });
   }, [settings.language, totalSteps]);
