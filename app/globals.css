@@ -13,6 +13,12 @@
 
   --btn: #0f172a;
   --btn-fg: #ffffff;
+
+  /* ✅ 추가: Light gradient background */
+--bg-gradient:
+  radial-gradient(circle at 30% 20%, rgba(15, 23, 42, 0.06) 0%, rgba(15, 23, 42, 0) 55%),
+  radial-gradient(circle at 70% 80%, rgba(15, 23, 42, 0.04) 0%, rgba(15, 23, 42, 0) 60%),
+  linear-gradient(135deg, #ffffff 0%, #f3f4f6 45%, #e5e7eb 100%);
 }
 
 /* ===== Dark ===== */
@@ -28,26 +34,25 @@ html.dark {
 
   --btn: #f4f4f5;
   --btn-fg: #0a0a0a;
+
+  /* ✅ 추가: Dark gradient background */
+  --bg-gradient:
+    radial-gradient(circle at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.25) 100%),
+    radial-gradient(circle at top left, #1c2230 0%, #121826 45%, #0b0f1a 100%);
 }
 
-html {
-  color-scheme: light;
-}
-
-html.dark {
-  color-scheme: dark;
-}
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
 
 body {
-  background: var(--bg);
+  /* ✅ 여기 한 줄만 바꾸는 게 핵심 */
+  background: var(--bg-gradient);
   color: var(--fg);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+/* (선택) 배경이 더 안정적으로 보이게 */
+html, body { height: 100%; }
 
-.hide-scrollbar {
-  scrollbar-width: none;
-}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; }
