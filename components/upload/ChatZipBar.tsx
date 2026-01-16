@@ -87,13 +87,7 @@ export default function ChatZipBar() {
   };
 
   return (
-    <div
-      className="
-        rounded-2xl p-4 shadow-xl border
-        bg-zinc-900 text-zinc-100 border-zinc-800
-        dark:bg-zinc-100 dark:text-zinc-900 dark:border-zinc-200
-      "
-    >
+    <div className="rounded-2xl p-4 shadow-xl border transition-all duration-300 bg-[var(--card)] text-[var(--fg)] border-[var(--card-border)]">
       {/* bg-card/95 → bg-card (완전 불투명), border 추가 */}
       
       {status && (

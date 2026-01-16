@@ -10,7 +10,7 @@
 
   --muted: #f4f4f5;
   --muted-fg: #52525b;
-
+    
   --btn: #0f172a;
   --btn-fg: #ffffff;
 
@@ -26,11 +26,11 @@ html.dark {
   --bg: #0a0a0a;
   --fg: #ededed;
 
-  --card: #0b0b0b;
-  --card-border: rgba(237, 237, 237, 0.12);
+  --card: #111625;
+  --card-border: rgba(255, 255, 255, 0.1);
 
-  --muted: #18181b;
-  --muted-fg: #a1a1aa;
+  --muted: #1e293b;
+  --muted-fg: #94a3b8;
 
   --btn: #f4f4f5;
   --btn-fg: #0a0a0a;
