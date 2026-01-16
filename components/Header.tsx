@@ -1,4 +1,3 @@
-// components/Header.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -14,8 +13,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b backdrop-blur">
-        {/* 컨테이너 폭을 주고, 안쪽을 w-full flex로 사용하여 좌우 정렬을 명확히 함 */}
+      <header className="sticky top-0 z-40 border-b backdrop-blur bg-background/80">
+        {/* bg-background/80 추가 - 80% 불투명 배경 */}
         <Container className="flex h-14 items-center justify-between">
           {/* 로고: Inter 폰트 & 반응형 크기 */}
           <div className="text-[17px] sm:text-xl md:text-2xl font-semibold tracking-tight">
@@ -28,7 +27,7 @@ export default function Header() {
             <button
               onClick={() => setOpenGuide(true)}
               aria-label="도움말"
-              className="rounded-lg p-2 sm:p-3 hover:bg-muted active:scale-95"
+              className="rounded-lg p-2 sm:p-3 hover:bg-muted active:scale-95 transition-colors"
             >
               <HelpIcon />
             </button>
@@ -37,7 +36,7 @@ export default function Header() {
             <button
               onClick={() => setOpenSettings(true)}
               aria-label="설정"
-              className="rounded-lg p-2 sm:p-3 hover:bg-muted active:scale-95"
+              className="rounded-lg p-2 sm:p-3 hover:bg-muted active:scale-95 transition-colors"
             >
               <MenuIcon />
             </button>
