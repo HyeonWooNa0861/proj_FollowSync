@@ -3,13 +3,16 @@
 import React, { useState } from "react";
 import SettingsDrawer from "./settings/SettingsDrawer";
 import GuideModal from "./guide/GuideModal";
+import DeveloperModal from "./developer/DeveloperModal";
 import HelpIcon from "./icons/Help_icon";
+import DeveloperIcon from "./icons/Developer_icon";
 import MenuIcon from "./icons/Menu_icon";
 import Container from "./layout/Container";
 
 export default function Header() {
   const [openSettings, setOpenSettings] = useState(false);
   const [openGuide, setOpenGuide] = useState(false);
+  const [openDeveloper, setOpenDeveloper] = useState(false);
 
   return (
     <>
@@ -32,6 +35,15 @@ export default function Header() {
               <HelpIcon />
             </button>
 
+            {/* 개발자 정보 아이콘 버튼: 반응형 padding */}
+            <button
+              onClick={() => setOpenDeveloper(true)}
+              aria-label="개발자 정보"
+              className="rounded-lg p-2 sm:p-3 hover:bg-muted active:scale-95 transition-colors"
+            >
+              <DeveloperIcon />
+            </button>
+
             {/* 설정 아이콘 버튼: 반응형 padding */}
             <button
               onClick={() => setOpenSettings(true)}
@@ -52,6 +64,10 @@ export default function Header() {
       <GuideModal
         open={openGuide}
         onClose={() => setOpenGuide(false)}
+      />
+      <DeveloperModal
+        open={openDeveloper}
+        onClose={() => setOpenDeveloper(false)}
       />
     </>
   );
