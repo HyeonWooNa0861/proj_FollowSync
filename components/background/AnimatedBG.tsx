@@ -39,31 +39,29 @@ export default function AnimatedBackground() {
         </svg>
       </div>
 
-      {/* 흐르는 파티클 */}
-      {/* <div className="particles">
-        {[...Array(30)].map((_, i) => (
-          <div
-            key={i}
-            className="particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 8}s`,
-              animationDuration: `${10 + Math.random() * 5}s`,
-            }}
-          />
-        ))}
-      </div> */}
-
       <style jsx>{`
+        /* ✅ 모바일 최적화: 하드웨어 가속 활성화 */
+        .gradient-flow,
+        .wave-container,
+        .wave {
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+          -webkit-perspective: 1000;
+          perspective: 1000;
+          transform: translate3d(0, 0, 0);
+        }
+
         /* 그라데이션 흐름 */
         .gradient-flow {
           position: absolute;
           border-radius: 50%;
-          filter: blur(120px);
+          /* ✅ blur 값 감소 (120px → 80px) */
+          filter: blur(80px);
           opacity: 0.3;
-          animation: flow 25s ease-in-out infinite;
+          /* ✅ 애니메이션 속도 느리게 (25s → 35s) */
+          animation: flow 35s ease-in-out infinite;
           mix-blend-mode: screen;
+          /* ✅ will-change 제거 (모바일 성능 개선) */
         }
 
         .flow-1 {
@@ -89,7 +87,7 @@ export default function AnimatedBackground() {
           );
           bottom: -15%;
           right: -15%;
-          animation-delay: -8s;
+          animation-delay: -12s;
         }
 
         .flow-3 {
@@ -103,25 +101,22 @@ export default function AnimatedBackground() {
           top: 40%;
           left: 50%;
           transform: translate(-50%, -50%);
-          animation-delay: -16s;
+          animation-delay: -24s;
         }
 
+        /* ✅ 애니메이션 단순화 (rotate 제거, transform 최소화) */
         @keyframes flow {
           0%, 100% {
-            transform: translate(0, 0) scale(1) rotate(0deg);
+            transform: translate(0, 0) scale(1);
             border-radius: 50% 40% 60% 50%;
           }
-          25% {
-            transform: translate(50px, -80px) scale(1.15) rotate(90deg);
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
             border-radius: 60% 50% 40% 60%;
           }
-          50% {
-            transform: translate(-40px, 60px) scale(0.9) rotate(180deg);
+          66% {
+            transform: translate(-30px, 40px) scale(0.95);
             border-radius: 40% 60% 50% 40%;
-          }
-          75% {
-            transform: translate(70px, 30px) scale(1.1) rotate(270deg);
-            border-radius: 50% 40% 60% 50%;
           }
         }
 
@@ -142,8 +137,9 @@ export default function AnimatedBackground() {
           height: 100%;
         }
 
+        /* ✅ 물결 애니메이션 속도 느리게 (15s → 20s) */
         .wave-path {
-          animation: wave-flow 15s ease-in-out infinite;
+          animation: wave-flow 20s linear infinite;
         }
 
         .wave-1 {
@@ -152,12 +148,12 @@ export default function AnimatedBackground() {
         }
 
         .wave-2 {
-          animation-delay: -5s;
+          animation-delay: -7s;
           opacity: 0.5;
         }
 
         .wave-3 {
-          animation-delay: -10s;
+          animation-delay: -14s;
           opacity: 0.3;
         }
 
@@ -170,70 +166,55 @@ export default function AnimatedBackground() {
           }
         }
 
-        /* 흐르는 파티클 */
-        .particles {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-
-        .particle {
-          position: absolute;
-          width: 3px;
-          height: 3px;
-          border-radius: 50%;
-          background: linear-gradient(45deg, 
-            #833AB4, 
-            #E1306C, 
-            #FD1D1D, 
-            #F77737, 
-            #FCAF45
-          );
-          box-shadow: 0 0 10px rgba(131, 58, 180, 0.5);
-          animation: particle-stream 12s linear infinite;
-          opacity: 0;
-        }
-
-        @keyframes particle-stream {
-          0% {
-            transform: translate(0, 0) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 0.8;
-          }
-          100% {
-            transform: translate(-50vw, -100vh) rotate(360deg);
-            opacity: 0;
-          }
-        }
-
-        /* 반응형 */
+        /* ✅ 모바일 최적화 */
         @media (max-width: 768px) {
           .gradient-flow {
-            filter: blur(80px);
+            /* blur 더 감소 */
+            filter: blur(60px);
+            /* 애니메이션 더 느리게 */
+            animation-duration: 45s;
           }
+          
           .flow-1, .flow-2, .flow-3 {
-            width: 400px;
-            height: 400px;
+            /* 크기 축소 */
+            width: 350px;
+            height: 350px;
           }
-          .particle {
-            width: 2px;
-            height: 2px;
-          }
+          
           .wave-container {
             height: 20%;
+            /* 물결 opacity 감소 */
+            opacity: 0.08;
+          }
+
+          .wave-path {
+            /* 물결 애니메이션 더 느리게 */
+            animation-duration: 25s;
+          }
+
+          /* ✅ flow-3 단순화 */
+          .flow-3 {
+            transform: translate(-50%, -50%);
+            animation: none; /* 모바일에서는 애니메이션 비활성화 */
           }
         }
 
+        /* ✅ 저사양 기기 대응 */
+        @media (max-width: 480px) {
+          .gradient-flow {
+            filter: blur(40px);
+            opacity: 0.25;
+          }
+          
+          .wave-container {
+            display: none; /* 저사양에서는 물결 제거 */
+          }
+        }
+
+        /* ✅ 사용자가 애니메이션 줄이기를 설정한 경우 */
         @media (prefers-reduced-motion: reduce) {
           .gradient-flow,
-          .wave-path,
-          .particle {
+          .wave-path {
             animation: none;
           }
         }
