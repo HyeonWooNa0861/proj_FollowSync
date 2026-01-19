@@ -141,11 +141,11 @@ export default function Guide({ totalSteps }: Props) {
         {steps.map((s, i) => (
           <div 
             key={s.idx} 
-            ref={(el) => (wrapperRefs.current[i] = el)}
+            ref={(el) => { wrapperRefs.current[i] = el; }}
             className="guide-item"
           >
             <div
-              ref={(el) => (itemsRef.current[i] = el)}
+              ref={(el) => { wrapperRefs.current[i] = el; }}
               data-step={s.idx}
               className="guide-card"
             >
