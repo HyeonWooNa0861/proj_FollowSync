@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+
 import SettingsDrawer from "./settings/SettingsDrawer";
 import GuideModal from "./guide/GuideModal";
 import DeveloperModal from "./developer/DeveloperModal";
@@ -14,19 +15,24 @@ export default function Header() {
   const [openGuide, setOpenGuide] = useState(false);
   const [openDeveloper, setOpenDeveloper] = useState(false);
 
+  const handleLogoClick = () => {
+    window.location.reload();
+  };
+
   return (
     <>
       <header className="sticky top-0 z-40 border-b backdrop-blur bg-background/80">
-        {/* bg-background/80 추가 - 80% 불투명 배경 */}
         <Container className="flex h-14 items-center justify-between">
-          {/* 로고: Inter 폰트 & 반응형 크기 */}
-          <div className="text-[17px] sm:text-xl md:text-2xl font-semibold tracking-tight">
+          <button
+            type="button"
+            onClick={handleLogoClick}
+            aria-label="페이지 새로고침"
+            className="text-[17px] sm:text-xl md:text-2xl font-semibold tracking-tight hover:opacity-80 active:scale-[0.99] transition"
+          >
             FollowSync
-          </div>
+          </button>
 
-          {/* 우측 아이콘 그룹 */}
           <div className="flex items-center gap-1">
-            {/* 도움말 아이콘 버튼: 반응형 padding */}
             <button
               onClick={() => setOpenGuide(true)}
               aria-label="도움말"
@@ -35,7 +41,6 @@ export default function Header() {
               <HelpIcon />
             </button>
 
-            {/* 개발자 정보 아이콘 버튼: 반응형 padding */}
             <button
               onClick={() => setOpenDeveloper(true)}
               aria-label="개발자 정보"
@@ -44,7 +49,6 @@ export default function Header() {
               <DeveloperIcon />
             </button>
 
-            {/* 설정 아이콘 버튼: 반응형 padding */}
             <button
               onClick={() => setOpenSettings(true)}
               aria-label="설정"
@@ -56,19 +60,9 @@ export default function Header() {
         </Container>
       </header>
 
-      {/* 모달/드로어 */}
-      <SettingsDrawer
-        open={openSettings}
-        onClose={() => setOpenSettings(false)}
-      />
-      <GuideModal
-        open={openGuide}
-        onClose={() => setOpenGuide(false)}
-      />
-      <DeveloperModal
-        open={openDeveloper}
-        onClose={() => setOpenDeveloper(false)}
-      />
+      <SettingsDrawer open={openSettings} onClose={() => setOpenSettings(false)} />
+      <GuideModal open={openGuide} onClose={() => setOpenGuide(false)} />
+      <DeveloperModal open={openDeveloper} onClose={() => setOpenDeveloper(false)} />
     </>
   );
 }
