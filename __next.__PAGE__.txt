@@ -1,0 +1,8 @@
+1:"$Sreact.fragment"
+2:I[52686,["/proj_FollowSync/_next/static/chunks/a56725fde0228af3.js","/proj_FollowSync/_next/static/chunks/973fec5772a22971.js"],"default"]
+3:I[70119,["/proj_FollowSync/_next/static/chunks/a56725fde0228af3.js","/proj_FollowSync/_next/static/chunks/973fec5772a22971.js"],"default"]
+4:I[18881,["/proj_FollowSync/_next/static/chunks/a56725fde0228af3.js","/proj_FollowSync/_next/static/chunks/973fec5772a22971.js"],"default"]
+5:I[97367,["/proj_FollowSync/_next/static/chunks/4fd93823156e59e8.js"],"OutletBoundary"]
+6:"$Sreact.suspense"
+0:{"buildId":"-8ums2BXBm4Zqg3yuvbQI","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"relative min-h-dvh","children":[["$","$L2",null,{}],["$","div",null,{"className":"relative min-h-dvh flex flex-col","style":{"zIndex":1},"children":[["$","$L3",null,{}],["$","main",null,{"className":"flex flex-1 items-center justify-center px-4","children":["$","div",null,{"className":"mx-auto w-full max-w-3xl px-4 ","children":["$","$L4",null,{}]}]}]]}]]}],[["$","script","script-0",{"src":"/proj_FollowSync/_next/static/chunks/973fec5772a22971.js","async":true}]],["$","$L5",null,{"children":["$","$6",null,{"name":"Next.MetadataOutlet","children":"$@7"}]}]]}],"loading":null,"isPartial":false}
+7:null
