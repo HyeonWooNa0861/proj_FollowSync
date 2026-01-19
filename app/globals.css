@@ -4,55 +4,67 @@
 :root {
   --bg: #ffffff;
   --fg: #0f172a;
-
   --card: #ffffff;
   --card-border: rgba(15, 23, 42, 0.12);
-
   --muted: #f4f4f5;
   --muted-fg: #52525b;
-    
   --btn: #0f172a;
   --btn-fg: #ffffff;
 
-  /* ✅ 추가: Light gradient background */
---bg-gradient:
-  radial-gradient(circle at 30% 20%, rgba(15, 23, 42, 0.06) 0%, rgba(15, 23, 42, 0) 55%),
-  radial-gradient(circle at 70% 80%, rgba(15, 23, 42, 0.04) 0%, rgba(15, 23, 42, 0) 60%),
-  linear-gradient(135deg, #ffffff 0%, #f3f4f6 45%, #e5e7eb 100%);
+  /* ✅ 수정: 색상 단계를 더 촘촘하게 하거나 투명도를 조절해 부드럽게 개선 */
+  --bg-gradient: 
+    radial-gradient(circle at 30% 20%, rgba(15, 23, 42, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(15, 23, 42, 0.03) 0%, transparent 50%),
+    linear-gradient(135deg, #ffffff 0%, #f9fafb 50%, #f3f4f6 100%);
 }
 
 /* ===== Dark ===== */
 html.dark {
   --bg: #0a0a0a;
   --fg: #ededed;
-
   --card: #111625;
   --card-border: rgba(255, 255, 255, 0.1);
-
   --muted: #1e293b;
   --muted-fg: #94a3b8;
-
   --btn: #f4f4f5;
   --btn-fg: #0a0a0a;
 
-  /* ✅ 추가: Dark gradient background */
-  --bg-gradient:
-    radial-gradient(circle at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.25) 100%),
-    radial-gradient(circle at top left, #1c2230 0%, #121826 45%, #0b0f1a 100%);
+  --bg-gradient: 
+    radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%),
+    linear-gradient(135deg, #1c2230 0%, #121826 50%, #0a0e17 100%);
 }
 
-html { color-scheme: light; }
-html.dark { color-scheme: dark; }
+html, body {
+  /* ✅ 수정: height 100%는 스크롤 시 배경 끊김의 원인입니다. */
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-  /* ✅ 여기 한 줄만 바꾸는 게 핵심 */
-  background: var(--bg-gradient);
   color: var(--fg);
   font-family: Arial, Helvetica, sans-serif;
+  /* ✅ 중요: 배경을 직접 넣지 않고 가상 요소(::before)를 활용합니다. */
+  background: var(--bg);
 }
 
-/* (선택) 배경이 더 안정적으로 보이게 */
-html, body { height: 100%; }
+/* ✅ 추가: 모바일 최적화 고정 배경 레이어 */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-gradient);
+  z-index: -1; /* 콘텐츠 뒤로 */
+  pointer-events: none;
+  /* ✅ 하드웨어 가속 활성화 (깨짐 방지) */
+  transform: translateZ(0);
+  will-change: contents;
+}
+
+/* ... 나머지 스타일 (hide-scrollbar, details 등) 동일 ... */
 
 /* 스크롤바 숨김 유틸리티 */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
