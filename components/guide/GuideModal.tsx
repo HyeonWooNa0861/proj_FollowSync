@@ -23,7 +23,7 @@ export default function GuideModal({
         className="relative w-full max-w-3xl rounded-2xl bg-background p-6 overflow-y-auto hide-scrollbar"
       >
         {/* 닫기 버튼 제거 */}
-        <Guide totalSteps={10} />
+        <Guide totalSteps={11} />
         <style jsx>{`
           /* 스크롤바 숨김 */
           .hide-scrollbar {
