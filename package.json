@@ -3,34 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "granite dev",
+    "dev:web": "next dev -p 5173",
+    "dev:next": "next dev",
+    "build": "granite build",
+    "build:web": "next build",
+    "build:next": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "next build && touch out/.nojekyll && gh-pages -d out"
+    "mtls:request": "node scripts/mtls-request.cjs",
+    "deploy": "npm run build:web && node -e \"require('fs').writeFileSync('out/.nojekyll', '')\" && gh-pages -d out",
+    "sentry:upload": "ait sentry upload-sourcemap"
   },
   "dependencies": {
+    "@apps-in-toss/web-framework": "latest",
+    "@toss/tds-mobile": "latest",
     "jszip": "^3.10.1",
-    "next": "16.1.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "next": "^15.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "eslint": "^9",
-    "eslint-config-next": "16.1.1",
+    "eslint-config-next": "^15.0.0",
     "gh-pages": "^6.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "deploy": "npm run build && node -e \"require('fs').writeFileSync('out/.nojekyll', '')\" && gh-pages -d out"
   }
 }

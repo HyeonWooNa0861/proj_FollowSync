@@ -2,6 +2,8 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { useSettings } from "../settings/SettingsContext";
+import JSZip from "jszip";
+import { parseInstagramZip } from "@/lib/instagramZip";
 
 export default function ChatZipBar() {
   const { settings } = useSettings();
@@ -44,27 +46,16 @@ export default function ChatZipBar() {
     setBusy(true);
     setStatus(
       settings.language === "ko"
-        ? "서버에서 ZIP 분석 중…"
-        : "Analyzing ZIP on server..."
+        ? "ZIP 분석 중…"
+        : "Analyzing ZIP..."
     );
     setUnfollowers([]);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "서버 처리 실패");
-      }
-
-      const list = Array.isArray(data.unfollowers) ? data.unfollowers : [];
+      const arrayBuffer = await file.arrayBuffer();
+      const zip = await JSZip.loadAsync(arrayBuffer);
+      const data = await parseInstagramZip(zip);
+      const list = Array.isArray(data.nonFollowers) ? data.nonFollowers : [];
       setUnfollowers(list);
 
       if (settings.language === "ko") {
@@ -76,9 +67,15 @@ export default function ChatZipBar() {
           `Done | Followers ${data.followers.length}, Following ${data.following.length}, Unfollowers ${list.length}`
         );
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const message =
+        e instanceof Error
+          ? e.message
+          : "분석에 실패했어요. ZIP 파일을 확인해주세요.";
       setStatus(
-        e?.message ?? "분석에 실패했어요. ZIP 파일을 확인해주세요."
+        settings.language === "ko"
+          ? message
+          : "Failed to analyze ZIP. Please check your file."
       );
       setUnfollowers([]);
     } finally {

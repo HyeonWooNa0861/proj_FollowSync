@@ -11,10 +11,10 @@ function normalizeKey(s: string) {
   return s.replace(/^@/, "").trim().toLowerCase();
 }
 
-function extractUsernames(anyJson: any): string[] {
+function extractUsernames(anyJson: unknown): string[] {
   const out: string[] = [];
 
-  const visit = (node: any) => {
+  const visit = (node: unknown) => {
     if (!node) return;
 
     if (Array.isArray(node)) {
@@ -23,32 +23,36 @@ function extractUsernames(anyJson: any): string[] {
     }
 
     if (typeof node === "object") {
+      const obj = node as Record<string, unknown>;
       // string_list_data: value가 없는 경우 href에서 파싱
-      const sld = (node as any).string_list_data;
+      const sld = obj.string_list_data;
       if (Array.isArray(sld)) {
         for (const it of sld) {
           // 1) value가 있으면 사용
-          if (typeof it?.value === "string" && it.value.trim()) {
-            out.push(it.value.trim());
-          }
-          // 2) value가 없으면 href에서 사용자명을 추출
-          else if (typeof it?.href === "string") {
-            // 예: https://www.instagram.com/_u/username
-            const match = it.href.match(/instagram\.com\/_u\/([^/?]+)/i);
-            if (match) out.push(match[1]);
+          if (it && typeof it === "object") {
+            const item = it as Record<string, unknown>;
+            if (typeof item.value === "string" && item.value.trim()) {
+              out.push(item.value.trim());
+            }
+            // 2) value가 없으면 href에서 사용자명을 추출
+            else if (typeof item.href === "string") {
+              // 예: https://www.instagram.com/_u/username
+              const match = item.href.match(/instagram\.com\/_u\/([^/?]+)/i);
+              if (match) out.push(match[1]);
+            }
           }
         }
       }
 
       // 별도로 title 필드에 사용자명이 들어오는 경우
-      const t = (node as any).title;
+      const t = obj.title;
       if (typeof t === "string" && t.trim()) out.push(t.trim());
 
       // username 필드 처리(기존 코드 유지)
-      const u = (node as any).username;
+      const u = obj.username;
       if (typeof u === "string" && u.trim()) out.push(u.trim());
 
-      Object.values(node).forEach(visit);
+      Object.values(obj).forEach(visit);
     }
   };
 
