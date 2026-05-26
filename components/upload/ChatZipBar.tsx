@@ -35,8 +35,8 @@ export default function ChatZipBar() {
         file
           ? status
           : settings.language === "ko"
-          ? "ZIP 파일을 먼저 선택해주세요."
-          : "Please select a ZIP file first."
+          ? "인스타그램 ZIP 파일을 먼저 선택해주세요."
+          : "Please select an Instagram ZIP file first."
       );
       return;
     }
@@ -157,8 +157,8 @@ export default function ChatZipBar() {
           {file
             ? file.name
             : !mounted || settings.language === "ko"
-            ? "ZIP 파일을 선택하시요"
-            : "Select a ZIP file"}
+            ? "인스타그램 ZIP 파일을 선택하세요"
+            : "Select an Instagram ZIP file"}
         </div>
 
         <button
